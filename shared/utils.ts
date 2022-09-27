@@ -1,7 +1,7 @@
 import * as s from 'zapatos/schema';
 
 function titleCase(s: string) {
-  return s.toLowerCase().replace(/(?<=^|\s)\S/g, m => m.toUpperCase());
+  return s.toLowerCase().replace(/(^|\s)\S/g, m => m.toUpperCase());
 }
 
 export function actorName(actor: s.actor.JSONSelectable) {
