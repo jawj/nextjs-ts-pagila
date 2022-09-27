@@ -1,30 +1,33 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import withDbClient from '../../shared/withDbClient';
 import * as db from 'zapatos/db';
-import * as s from 'zapatos/schema';
+import withDbClient from '../../shared/withDbClient';
+import { filmTitle } from '../../shared/utils';
+import { revalidationTime } from '../../shared/config';
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const films = await withDbClient(dbClient =>
-    db.select('film', db.all, { 
-      extras: { title: db.sql<s.film.SQL, string>`initcap(${"title"})` },
-      order: { by: 'title', direction: 'ASC' },
-    }).run(dbClient)
+    db.select('film', db.all, { order: { by: 'title', direction: 'ASC' } }).run(dbClient)
   );
-  return { props: { films } };
+  return {
+    revalidate: revalidationTime,
+    props: { films },
+  };
 }
 
-const Home: NextPage<Awaited<ReturnType<typeof getServerSideProps>>['props']> = ({ films }) =>
+const Home: NextPage<Awaited<ReturnType<typeof getStaticProps>>['props']> = ({ films }) =>
   <>
-    <Head><title>All films</title></Head>
+    <Head><title>Films</title></Head>
     <main>
+      <h1>Films</h1>
       <ul>
-        {films.map(film => 
+        {films.map(film =>
           <li key={film.film_id}>
-            <Link href={`/films/${film.film_id}`}>{film.title}</Link> ({film.release_year})
+            <Link href={`/films/${film.film_id}`}>{filmTitle(film)}</Link>
           </li>)}
       </ul>
+      <p><Link href='/'>&laquo; All data</Link></p>
     </main>
   </>;
 
