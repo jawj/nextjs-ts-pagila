@@ -13,6 +13,26 @@ a {
   box-sizing: border-box;
 }
 
+header {
+  text-align: center;
+  padding: 0 0 2ex;
+  border-bottom: 1px solid #eaeaea;
+  font-style: italic;
+}
+
+footer {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  column-gap: 2ex;
+  font-size: 14px;
+  padding: 2ex 0 0;
+  border-top: 1px solid #eaeaea;
+  margin-top: 6ex;
+}
+
 .loading {
   display: flex;
   flex: 1;
